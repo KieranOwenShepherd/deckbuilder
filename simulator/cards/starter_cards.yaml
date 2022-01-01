@@ -1,0 +1,34 @@
+# Starter Cards
+---
+
+- name: None
+  discard_value: 1 red
+  effect: None
+  cost: None
+
+- name: None
+  discard_value: 1 gold
+  effect: None
+  cost: None
+
+- name: None
+  discard_value: 1 black
+  effect: None
+  cost: 2 clear
+
+- name: None
+  discard_value: 1 red
+  effect: + card
+  cost: 1 clear
+
+- name: None
+  discard_value: 1 gold
+  effect: + card
+  cost: 1 clear
+
+- name: None
+  discard_value: None
+  effect: > 
+    At game end:
+    1 point for each red card
+  cost: 1 red

@@ -7,7 +7,6 @@
 // TODO pronouns - stand in for a noun - this, it
 // they can stand in for any type of thing... proving troublesome for the parser
 
-FULLSTOP : "."
 
 // ------- Fundamental words ----------
 
@@ -16,8 +15,6 @@ NAME : UCASE_LETTER LCASE_LETTER+
 BOOL : "and"|"or"
 // adjectives (adjunct nouns) let you specify a type
 ADJ : LC_WORD
-
-
 // ------- Gramatical building blocks ---------
 
 // lists of words
@@ -25,76 +22,107 @@ ADJ : LC_WORD
 list{item} : item ("," item)* BOOL item -> boollist
         | item -> singlelist
 
-// a noun-phrase
-np{noun} : determiner [ADJ] noun 
-        | np{noun} prepphrase -> prepositionphrase
-// TODO add pronouns "it"
-// TODO add proper nouns
+// ------ Instructions -------
+// each sentence is an instruction
 
-// prepositional phrase, makes a noun more specific
-// DILEMMA prepositions often need to match with types of objects
-?prepphrase : "with" np{LC_WORD}
-        | "in" np{place}
-        | "of" INT // eg. a cost of 6 or more TODO 'amount' should come with a type
+effect : sentence*
 
-// ------ Cards ----------
+sentence : op "."
+        | np op "." //standard use is players (are there other uses?)
 
-CARD : ("cards"|"card")
-
-// Verbs to be used with cards
-card_action : "discard"
-        | "gain"
-        | "trash"
-        | "draw"        // draw and mill are special in that they shouldn't be modified
-        | "mill"
-        | "bounce" // could be hold
-        | "swap" // this needs a matching 'with' for it to work
-
-// An instruction to be used with cards
-// Ops connect trasitive verbs [eg. discard] with their object noun [eg. 6 cards].
-// TODO we can make this more generic
+// An instruction
 // eg. discard (verb) a card (noun-phrase) from your hand (adverbial-phrase)
-cardop : card_action np{CARD} card_avp*
-// TODO : technically we could group the NP and AVP together into a list
+op : verb np avp*
 
 // The adverbial phrase modifies an action
-?card_avp : "to" place -> move_to
-        | "from" place -> move_from
+avp : adverbial np{place_noun}
 
-// ------------- effects -----------------
+// a general noun-phrase
+np{noun_type} : determiner noun_type 
 
+// define allowable prepositions OF, WITH etc
+obj_np : determiner [ADJ] object_noun [WITH attr_np]
+        | pronoun -> pronoun
+        | np{NAME} // a proper noun
 
-// places 
-// eg. the trash, your hand, your discard pile, the event pile
-place : determiner ADJ? LC_WORD
+attr_np : np{attr_np} OF np{quantity_noun}
 
-// determiners often give you a clue about the noun and make up part of the NP 
-// it might be - ownership or quantity
+// prepositional phrase, makes a noun more specific
+// eg. a cost of 6 coins or more // TODO the 'or'
 
+?object_noun : CARDS
+        | EFFECT
+        | PLAYERS
+
+?attr_noun : COST
+
+?place_noun : HAND
+        | TRASH
+
+quantity_noun : COINS
+
+pronoun : IT
+        | THEM
+
+verb : DISCARD
+        | GAIN
+        | TRASH
+        | DRAW
+        | MILL
+        | BOUNCE
+        | SWAP
+
+adverbial : TO
+        | FROM
+
+//preposition
+WITH : "with"
+OF : "of"
+
+//nouns
+CARDS : ("cards"|"card")
+EFFECT : "effect"
+PLAYERS : "players"
+COINS : ("coins"|"coin")       // Quantities
+COST : "cost"        // attributes
+PLACE_TRASH : "trash"       // places
+HAND : "hand"
+
+//pronoun
+IT : "it"
+THEM : "them"
+
+// Verbs to be used with cards
+DISCARD : "discard"
+GAIN : "gain"
+TRASH : "trash"
+DRAW : "draw" // draw and mill are special in that they shouldn't be modified
+MILL : "mill"
+BOUNCE : "bounce" // could be hold
+SWAP : "swap" // this needs a matching 'with' for it to work... it might be too hard to implement
+
+// Adverbials
+TO : "to"
+FROM : "from"
+
+// determiners often give you the only clue about ownership or quantity
 ?determiner : DEF_ART
+        | INDEF_ART
         | POS_DET
-        | quantifier
-
-// a quantifier specifies how many of the object
-// it may be an indefinite amount
-?quantifier : INT
-        | singular
+        | INT   // QUANTIFIERS
         | lteq
         | gteq
+        | "all"
 
 // Indefinite amounts
 lteq : INT "or less" | "up to" INT
 gteq : INT "or more"
 
-singular : INDEF_ART | DEF_ART
-
 POS_DET : "your" // TODO 'their'?
 INDEF_ART : "a"|"an" // just one thing (of which there might be many)
 DEF_ART : "the"
 
-// TODO support Pronouns (replaces previously mentioned noun - it, them)
-
-// TODO phrase examples
+// PHRASES THAT SHOULD WORK
 // gain up to 2 cards with cost less than 4 coins to your hand from the market.
 // discard up to 2 cards, then draw that many.
 // players with the most cards in hand discard a card.

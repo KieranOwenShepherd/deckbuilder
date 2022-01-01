@@ -1,0 +1,112 @@
+// A grammar for card effects
+
+// This grammar helps with segmentation and syntax, 
+// there is little to protect against grammatically correct, 
+// but nonsensical phrases in the context of the game
+
+// TODO pronouns - stand in for a noun - this, it
+// they can stand in for any type of thing... proving troublesome for the parser
+
+
+// ------- Fundamental words ----------
+
+LC_WORD : LCASE_LETTER+
+NAME : UCASE_LETTER LCASE_LETTER+
+BOOL : "and"|"or"
+// adjectives (adjunct nouns) let you specify a type
+ADJ : LC_WORD
+
+// ------ Sentences-------
+
+sentence : op "."
+        | np{players} op "."
+
+
+// ------- Gramatical building blocks ---------
+
+// lists of words
+// eg. apple, cardomom and pear
+list{item} : item ("," item)* BOOL item -> boollist
+        | item -> singlelist
+
+// a noun-phrase
+np{noun} : determiner [ADJ] noun 
+        | np{noun} prepphrase -> prepositionphrase
+// TODO add pronouns "it"
+// TODO add proper nouns
+
+// prepositional phrase, makes a noun more specific
+// DILEMMA prepositions often need to match with types of objects
+?prepphrase : "with" np{LC_WORD}
+        | "of" INT // eg. a cost of 6 or more TODO 'amount' should come with a type
+
+// ------ Cards ----------
+
+CARD : ("cards"|"card")
+
+// Verbs to be used with cards
+card_action : "discard"
+        | "gain"
+        | "trash"
+        | "draw"        // draw and mill are special in that they shouldn't be modified
+        | "mill"
+        | "bounce" // could be hold
+        | "swap" // this needs a matching 'with' for it to work
+
+// An instruction to be used with cards
+// Ops connect trasitive verbs [eg. discard] with their object noun [eg. 6 cards].
+// TODO we can make this more generic
+// eg. discard (verb) a card (noun-phrase) from your hand (adverbial-phrase)
+cardop : card_action np{CARD} card_avp*
+// TODO : technically we could group the NP and AVP together into a list
+
+// The adverbial phrase modifies an action
+?card_avp : "to" place -> move_to
+        | "from" place -> move_from
+
+// ------------- effects -----------------
+
+
+// places 
+// eg. the trash, your hand, your discard pile, the event pile
+place : determiner ADJ? LC_WORD
+
+// determiners often give you a clue about the noun and make up part of the NP 
+// it might be - ownership or quantity
+
+?determiner : DEF_ART
+        | POS_DET
+        | quantifier
+        | "all"
+
+// a quantifier specifies how many of the object
+// it may be an indefinite amount
+?quantifier : INT
+        | singular
+        | lteq
+        | gteq
+
+// Indefinite amounts
+lteq : INT "or less" | "up to" INT
+gteq : INT "or more"
+
+singular : INDEF_ART | DEF_ART
+
+POS_DET : "your" // TODO 'their'?
+INDEF_ART : "a"|"an" // just one thing (of which there might be many)
+DEF_ART : "the"
+
+// TODO support Pronouns (replaces previously mentioned noun - it, them)
+
+// TODO phrase examples
+// gain up to 2 cards with cost less than 4 coins to your hand from the market.
+// discard up to 2 cards, then draw that many.
+// players with the most cards in hand discard a card.
+// all players swap a card in their hand with a card in the market.
+// swap a card in your hand with a card in your phase 2.
+
+%import common.INT
+%import common.WS
+%import common.LCASE_LETTER
+%import common.UCASE_LETTER
+%ignore WS 

@@ -23,32 +23,26 @@ from collections import namedtuple
 
 parser = Lark(
     open(r"C:\Users\kiera\Documents\Projects\D-Lite\effects\grammar.lark"),
-    start='cardop'
+    start='effect'
 )
 
 
 
-class ExecEffect(Transformer):
-    def __init__(self, game, agent):
-        self.agent = agent
-        self.game = game
+class EchoEffect(Transformer):
+    def __init__(self):
+        pass
 
-    def gain(self, items):
-        print(dict(cards=items[0], direct=items[1:]))
-    def cards(self, items):
-        return items #dict(items)
+    def effect(self, items):
+        print(items)
+
+    def sentence(self, items):
+        return items
+
     def adj(self, items):
         return "card_type", items[0]
-    def attr(self, items):
-        return str(items[0]), items[1]
-    def place(self, items):
-        return items[:2]
-    def amount(self, items):
-        return int(items[0])
-    def singular(self,items):
-        return 1
-    def boollist(self, items):
-            return items[-2], [*items[:-2], items[-1]]
+
+    def verb(self, items):
+        print("My verb {}".format(items))
 
 
 
