@@ -1,0 +1,9 @@
+- name: Refresh
+  effect: draw cards until your hand has 3 cards
+
+- name: Rest
+  effect: discard your cards in play
+
+- name: Buy
+  effect: buy 1 card
+

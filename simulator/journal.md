@@ -1,7 +1,9 @@
 
-# Goals
+# Ending the game
 
-## Knowledge trumps.
+The game needs to tick down to the end at a fairly constant rate, making play time consistent.
+
+## Tactical play wins.
 
 Wingspan is mysterious, which birds are actually good? 
 Chess isn't mysterious on face, it's obvious which piece is the best,
@@ -26,6 +28,7 @@ Shifting priorities through the game also provide some balance.
 ## Easier to read the cards
 
 Andrews pulling one copy of each aside I still find frustrating.
+I have to make all the cards within easy reading.
 
 ## Interactivity
 
@@ -85,6 +88,38 @@ Cards can't be discarded for blue, you can only get it by playing effects.
 
 # More Artifacts
 
-A power that players temporarily hold, that's really awesome interactivity.
+A power that players temporarily hold, that's really useful interactivity.
 
 One careful thing about the design from dominion is that they always continue to progress the game.
+
+
+# Programming card movement
+
+Playing a card 
+- remove from one tuple add to another
+Drawing a card 
+Shuffling cards
+
+There's two types of places cards go; 
+- decks - ordered, hidden - deck, other deck
+- areas - unordered, visible - hand, trash, in_play, attached, sidedeck
+
+a tuple works fine for decks
+frozenset almost works fine for areas except that it doesn't support duplicates
+
+I could turn off equality testing for cards
+
+# Strategy of keeping cards
+
+I want trashing of starter cards to be a more difficult decision.
+If you can always get them back whenever you want, it's not a tough decision.
+
+# Swapping out cards
+
+I want to keep the game light
+
+# Categories
+
+They always seem to help.
+We can create categories with effect text, costs and discard values.
+However, the symbology for that is tougher.

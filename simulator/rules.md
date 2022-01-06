@@ -10,18 +10,12 @@ commodity cards
     - worth 1 red, gives 1 coin
     - worth 1 red, gives 1 blue
 
-# Play
+# Players Turn
 
-On your turn You must
-
+On your turn You may
 - Play a card
-- Activate one of the skills
-- Buy any number of cards
-- discard any cards left in hand
-- draw 3 cards, and if this would empty your deck,
-    - first draw as many as possible
-    - discard all cards in play
-    - shuffle your discard pile and make it your new deck
+and you may
+- Activate one of the action skills
 
 # Terms - Keywords, Operators
 

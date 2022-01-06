@@ -1,0 +1,27 @@
+# Starter Cards
+---
+
+- name: Smile
+  discard_value: 1 red
+  effect: null
+  cost: null
+
+- name: Coin
+  discard_value: 1 gold
+  effect: null
+  cost: null
+
+- name: Grass
+  discard_value: null
+  effect: 1 blue
+  cost: 1 gold
+
+- name: Wink
+  discard_value: 1 red
+  effect: +1 card
+  cost: null
+
+- name: null
+  discard_value: null
+  effect: null
+  cost: null

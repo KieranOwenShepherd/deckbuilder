@@ -3,15 +3,20 @@
 # Effects
 
 Players with 2 Red in play: + 2 Cards
-All players - Pay 1 red or trash a card.
+Each player - pay 1 red or trash a card.
+Once per turn you may pay with a card in play.
+Each player - pay x or trash a card from your sidedeck
+Buy a card from the trash pile...
 
 # Initiative Actions
+
 Players may take one of these actions on their turn
 
 ## Staple
 
 buy a card
-discard your hand and cards in play. +3 cards
+discard your hand and cards in play. 
+draw until you have 3 cards
 
 ## Transitory
 
